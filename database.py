@@ -3,6 +3,7 @@ import sqlite3
 class Database:
     def __init__(self, db_path='database.db'):
         self.conn = sqlite3.connect(db_path, check_same_thread=False)
+        self.cursor = self.conn.cursor()
         self.create_tables()
 
     def create_tables(self):
@@ -48,3 +49,11 @@ class Database:
     def get_item_by_id(self, item_id):
         self.cursor.execute("SELECT * FROM items WHERE id = ?", (item_id,))
         return self.cursor.fetchone()
+    
+    def guardar_cotizacion(self, cliente, archivo):
+        cursor = self.conn.cursor()
+        cursor.execute(
+        "INSERT INTO cotizaciones (cliente, archivo, fecha) VALUES (?, ?, DATE('now'))",
+        (cliente, archivo)
+    )
+        self.conn.commit()

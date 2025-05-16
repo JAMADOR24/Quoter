@@ -6,7 +6,7 @@ class PDFGenerator:
         self.pdf = FPDF()
         self.titulo = titulo
 
-    def generate(self, doc_id, cliente, items):
+    def generar(self, doc_id, cliente, items):
         self.pdf.add_page()
         self.pdf.set_font("Arial", 'B', 16)
         self.pdf.cell(200, 10, self.titulo, ln=True, align='C')

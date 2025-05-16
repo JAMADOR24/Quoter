@@ -35,8 +35,12 @@ def crear_cotizacion():
             items_info.append((nombre, cantidad, precio))
 
     # Generar PDF con los datos de la base
-    pdf = PDFGenerator()
-    archivo = pdf.generar(cliente, items_info)
+    pdf = PDFGenerator("Cotización")
+    # Generar PDF
+    from datetime import datetime
+
+    doc_id = f"COT_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    archivo = pdf.generar(doc_id, cliente, items_info)
 
     # Guardar cotización
     db.guardar_cotizacion(cliente, archivo)
