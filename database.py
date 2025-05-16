@@ -55,3 +55,8 @@ class Database:
     def guardar_cotizacion_item(self, cot_id, item_id, cantidad):
         self.cursor.execute("INSERT INTO cotizacion_items (cot_id, item_id, quantity) VALUES (?, ?, ?)", (cot_id, item_id, cantidad))
         self.conn.commit()
+    
+    def update_item(self, item_id, nombre, tipo, precio):
+        self.cursor.execute("UPDATE items SET nombre = ?, tipo = ?, precio = ? WHERE id = ?", (nombre, tipo, precio, item_id))
+        self.conn.commit()
+   

@@ -11,6 +11,10 @@ def index():
     items = db.list_items()
     return render_template('index.html', items=items)
 
+@app.route('/items')
+def lista_items():
+    items = db.list_items()  # Lista todos los ítems, por ejemplo [(id, nombre, tipo, precio), ...]
+    return render_template('items.html', items=items)
 
 
 @app.route('/crear-item', methods=['GET', 'POST'])

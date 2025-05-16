@@ -34,7 +34,27 @@ document.getElementById("cotizacionForm").addEventListener("submit", async funct
             <p>PDF generado con éxito: 
                 <a href="/descargar/${result.archivo}" target="_blank">${result.archivo}</a>
             </p>`;
+
+        // Limpiar el formulario
+        this.reset();
+
+        // Deshabilitar todos los inputs de cantidad, porque al resetear los checkbox quedan desmarcados
+        document.querySelectorAll('input[type=number]').forEach(input => {
+            input.disabled = true;
+        });
     } else {
         document.getElementById("resultado").innerText = "Hubo un error generando la cotización.";
     }
+});
+// Manejar el evento de cambio en los inputs de cantidad
+document.querySelectorAll('input[type=number]').forEach(input => {
+    input.addEventListener('change', (e) => {
+        const id = e.target.id.split('_')[1];
+        const checkbox = document.querySelector(`input[name='item'][value='${id}']`);
+        if (e.target.value > 0) {
+            checkbox.checked = true;
+        } else {
+            checkbox.checked = false;
+        }
+    });
 });

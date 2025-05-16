@@ -21,6 +21,25 @@
             </div>
         {% endfor %}
 
+        <h1>Lista de Ítems</h1>
+<table>
+    <tr>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+    </tr>
+    {% for item in items %}
+    <tr>
+        <td>{{ item[1] }}</td>
+        <td>{{ item[2] }}</td>
+        <td>${{ '%.2f' % item[3] }}</td>
+        <td><a href="/editar-item/{{ item[0] }}">Editar</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+
         <!-- <button type="submit">Generar Cotización</button>-->
 
   <form action="/generar" method="POST" id="cotizacionForm">
