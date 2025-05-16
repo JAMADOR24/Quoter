@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cotizador Web</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Cotizador Web</h1>
+
+    <form id="cotizacionForm">
+        <label for="cliente">Nombre del cliente:</label>
+        <input type="text" id="cliente" name="cliente" required>
+
+        <h3>Selecciona los ítems:</h3>
+        <div id="items-list">
+            {% for item in items %}
+                <div>
+                    <input type="checkbox" name="item" value="{{ item[0] }}" data-price="{{ item[3] }}">
+                    {{ item[1] }} - ${{ item[3] }}
+                    <input type="number" min="1" value="1" class="cantidad" data-id="{{ item[0] }}">
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit">Generar Cotización</button>
+    </form>
+
+    <div id="resultado"></div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
