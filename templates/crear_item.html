@@ -1,30 +1,29 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Crear ítem</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Crear Nuevo Ítem</title>
 </head>
 <body>
-    <h1>Crear nuevo ítem</h1>
-
-    <form method="POST">
-        <label for="nombre">Nombre del ítem:</label>
-        <input type="text" name="nombre" required><br><br>
-
-        <label for="tipo">Tipo:</label>
-        <select name="tipo" required>
-            <option value="servicio">Servicio</option>
-            <option value="articulo">Artículo</option>
-        </select><br><br>
-
-        <label for="precio">Precio:</label>
-        <input type="number" name="precio" step="0.01" required><br><br>
-
-        <button type="submit">Guardar</button>
+    <h1>Crear Nuevo Ítem</h1>
+    <form action="/crear-item" method="POST">
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+        </div>
+        <div>
+            <label for="tipo">Tipo:</label>
+            <select id="tipo" name="tipo" required>
+                <option value="Hardware">Hardware</option>
+                <option value="Servicio">Servicio</option>
+                <!-- Agrega más tipos si quieres -->
+            </select>
+        </div>
+        <div>
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" name="precio" step="0.01" min="0" required>
+        </div>
+        <button type="submit">Agregar Ítem</button>
     </form>
-
-    <br>
-    <a href="/">← Volver al inicio</a>
 </body>
 </html>

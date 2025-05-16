@@ -1,14 +1,17 @@
 from flask import Flask, render_template, request, send_file
 from database import Database
 from pdf_generator import PDFGenerator
+from datetime import datetime
 
 app = Flask(__name__)
-db = Database('database.py')
+db = Database()
 
 @app.route('/', methods=['GET'])
 def index():
     items = db.list_items()
     return render_template('index.html', items=items)
+
+
 
 @app.route('/crear-item', methods=['GET', 'POST'])
 def crear_item():
@@ -18,48 +21,30 @@ def crear_item():
         return render_template('item_creado.html', nombre=data['nombre'])
     return render_template('crear_item.html')
 
-@app.route('/crear-cotizacion', methods=['POST'])
-def crear_cotizacion():
-    data = request.get_json()
-    cliente = data['cliente']
-    items = data['items']  
+@app.route('/generate', methods=['POST'])
+def generate():
+    cliente = request.form.get('cliente')
+    item_ids = request.form.getlist('items')
 
-    # Obtener info actualizada de la base de datos
+    if not cliente or not item_ids:
+        return "Debe ingresar cliente y al menos un ítem.", 400
+
     items_info = []
-    for item in items:
-        db_item = db.get_item_by_id(item['item_id'])  # devuelve: (id, nombre, tipo, precio)
+    for item_id in item_ids:
+        db_item = db.get_item_by_id(item_id)
         if db_item:
             nombre = db_item[1]
             precio = db_item[3]
-            cantidad = item['cantidad']
+            cantidad = int(request.form.get(f'cantidad_{item_id}', 1))
             items_info.append((nombre, cantidad, precio))
 
-    # Generar PDF con los datos de la base
-    pdf = PDFGenerator("Cotización")
-    # Generar PDF
-    from datetime import datetime
-
     doc_id = f"COT_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-    archivo = pdf.generar(doc_id, cliente, items_info)
+    pdf = PDFGenerator("Cotización")
+    archivo = pdf.generate(doc_id, cliente, items_info)
 
-    # Guardar cotización
     db.guardar_cotizacion(cliente, archivo)
 
-    return {'success': True, 'archivo': archivo}
-    
-    # Lista de objetos con item_id y cantidad
-
-    # Aquí va la misma lógica que usas para crear cotización y PDF
-    # ...
-    
-    # Devuelve nombre del archivo generado
-    return {'success': True, 'archivo': 'cotización_1.pdf'}
-
-@app.route('/descargar/<filename>')
-def descargar_pdf(filename):
-    return send_file(filename, as_attachment=True)
+    return send_file(archivo, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(debug=True)
-# app.py
-# Este archivo contiene la lógica de la aplicación Flask.

@@ -7,20 +7,31 @@
 </head>
 <body>
     <h1>Cotizador Web</h1>
-    <form action="/generar" method="POST">
-        <label>Nombre del cliente a cotizar: </label>
-        <input type="text" name="cliente" required>
-        <h2>Selecciona los ítems:</h2>
+    <form action="/generate" method="POST">
+        <label for="cliente">Nombre del cliente a cotizar:</label>
+        <input type="text" name="cliente" id="cliente" required> 
 
+        <h2>Selecciona los ítems:</h2>
         {% for item in items %}
-            <div>
-                <input type="checkbox" id="item{{item[0]}}" name="items" value="{{item[0]}}">
-                <label for="item{{item[0]}}">{{item[1]}} ({{item[2]}}) - ${{'%.2f' % item[3]}}</label>
-                Cantidad: <input type="number" name="cantidad_{{item[0]}}" value="1" min="1" style="width: 50px;">
+            <div style="margin-bottom: 10px;">
+                <input type="checkbox" name="items" value="{{ item[0] }}" id="item{{ item[0] }}">
+                <label for="item{{ item[0] }}">{{ item[1] }} ({{ item[2] }}) - ${{ '%.2f' % item[3] }}</label>
+                <label>Cantidad:</label>
+                <input type="number" name="cantidad_{{ item[0] }}" value="1" min="1" style="width: 60px;">
             </div>
         {% endfor %}
 
+        <!-- <button type="submit">Generar Cotización</button>-->
+
+  <form action="/generar" method="POST" id="cotizacionForm">
+    <!-- ... tus otros campos ... -->
+
+    <div style="display: flex; gap: 10px; margin-top: 15px;">
         <button type="submit">Generar Cotización</button>
+        <button type="button" onclick="window.location.href='/crear-item'">Crear Nuevo Ítem</button>
+    </div>
+</form>
+
     </form>
 </body>
 </html>

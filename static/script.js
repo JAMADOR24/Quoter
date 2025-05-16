@@ -1,3 +1,13 @@
+// Primero, manejar habilitar/deshabilitar cantidad cuando cambie un checkbox
+document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+    cb.addEventListener('change', (e) => {
+        const id = e.target.value;
+        const cantidadInput = document.getElementById('cantidad_' + id);
+        cantidadInput.disabled = !e.target.checked;
+    });
+});
+
+// Luego, manejar el submit del formulario
 document.getElementById("cotizacionForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
@@ -7,7 +17,7 @@ document.getElementById("cotizacionForm").addEventListener("submit", async funct
 
     seleccionados.forEach(input => {
         const id = parseInt(input.value);
-        const cantidad = parseInt(document.querySelector(`.cantidad[data-id='${id}']`).value);
+        const cantidad = parseInt(document.getElementById('cantidad_' + id).value);
         items.push({ item_id: id, cantidad });
     });
 

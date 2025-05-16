@@ -1,0 +1,13 @@
+<form method="POST" action="/generar">
+    <label>Nombre del cliente a cotizar:</label>
+    <input type="text" name="cliente"><br><br>
+
+    <h2>Selecciona los ítems:</h2>
+    {% for item in items %}
+        <input type="checkbox" name="items" value="{{ item[0] }}">
+        {{ item[1] }} - ${{ "{:,.2f}".format(item[3]) }}<br>
+    {% endfor %}
+
+    <br>
+    <button type="submit">Generar Cotización</button>
+</form>
