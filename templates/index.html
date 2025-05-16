@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Cotizador Web</title>
@@ -7,27 +7,20 @@
 </head>
 <body>
     <h1>Cotizador Web</h1>
+    <form action="/generar" method="POST">
+        <label>Nombre del cliente a cotizar: </label>
+        <input type="text" name="cliente" required>
+        <h2>Selecciona los ítems:</h2>
 
-    <form id="cotizacionForm">
-        <label for="cliente">Nombre del cliente a cotizar:</label>
-        <input type="text" id="cliente" name="cliente" required>
-
-        <h3>Selecciona los ítems:</h3>
-        <div id="items-list">
-            {% for item in items %}
-                <div>
-                    <input type="checkbox" name="item" value="{{ item[0] }}" data-price="{{ item[3] }}">
-                    {{ item[1] }} - ${{ item[3] }}
-                    <input type="number" min="1" value="1" class="cantidad" data-id="{{ item[0] }}">
-                </div>
-            {% endfor %}
-        </div>
+        {% for item in items %}
+            <div>
+                <input type="checkbox" id="item{{item[0]}}" name="items" value="{{item[0]}}">
+                <label for="item{{item[0]}}">{{item[1]}} ({{item[2]}}) - ${{'%.2f' % item[3]}}</label>
+                Cantidad: <input type="number" name="cantidad_{{item[0]}}" value="1" min="1" style="width: 50px;">
+            </div>
+        {% endfor %}
 
         <button type="submit">Generar Cotización</button>
     </form>
-
-    <div id="resultado"></div>
-
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

@@ -3,9 +3,9 @@ from database import Database
 from pdf_generator import PDFGenerator
 
 app = Flask(__name__)
-db = Database('database.db')
+db = Database('database.py')
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     items = db.list_items()
     return render_template('index.html', items=items)

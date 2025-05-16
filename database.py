@@ -7,8 +7,7 @@ class Database:
         self.create_tables()
 
     def create_tables(self):
-        cursor = self.conn.cursor()
-        cursor.execute('''
+        self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS items (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT,
@@ -16,7 +15,7 @@ class Database:
                 price REAL
             )
         ''')
-        cursor.execute('''
+        self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS cotizaciones (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 cliente TEXT,
@@ -24,7 +23,7 @@ class Database:
                 total REAL
             )
         ''')
-        cursor.execute('''
+        self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS cotizacion_items (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 cot_id INTEGER,
@@ -37,23 +36,22 @@ class Database:
         self.conn.commit()
 
     def add_item(self, name, item_type, price):
-        cursor = self.conn.cursor()
-        cursor.execute('INSERT INTO items (name, type, price) VALUES (?, ?, ?)', (name, item_type, price))
+        self.cursor.execute('INSERT INTO items (name, type, price) VALUES (?, ?, ?)', (name, item_type, price))
         self.conn.commit()
 
     def list_items(self):
-        cursor = self.conn.cursor()
-        cursor.execute('SELECT * FROM items')
-        return cursor.fetchall()
-    
+        self.cursor.execute('SELECT * FROM items')
+        return self.cursor.fetchall()
+
     def get_item_by_id(self, item_id):
         self.cursor.execute("SELECT * FROM items WHERE id = ?", (item_id,))
         return self.cursor.fetchone()
-    
-    def guardar_cotizacion(self, cliente, archivo):
-        cursor = self.conn.cursor()
-        cursor.execute(
-        "INSERT INTO cotizaciones (cliente, archivo, fecha) VALUES (?, ?, DATE('now'))",
-        (cliente, archivo)
-    )
+
+    def guardar_cotizacion(self, cliente, total):
+        self.cursor.execute("INSERT INTO cotizaciones (cliente, fecha, total) VALUES (?, DATE('now'), ?)", (cliente, total))
+        self.conn.commit()
+        return self.cursor.lastrowid  # Retorna id de cotización guardada
+
+    def guardar_cotizacion_item(self, cot_id, item_id, cantidad):
+        self.cursor.execute("INSERT INTO cotizacion_items (cot_id, item_id, quantity) VALUES (?, ?, ?)", (cot_id, item_id, cantidad))
         self.conn.commit()
